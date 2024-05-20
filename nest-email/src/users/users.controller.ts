@@ -7,25 +7,23 @@ import { IResponse } from "common/interface/response.interface";
 // import { UserService } from "./users.service";
 
 
-// // @UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 // @UseInterceptors(TransformInterceptor)
-// @Controller('user')
-// export class UserController {
+@Controller('user')
+export class UserController {
 
-//     constructor(
-//         private userService: UserService;
-//     ){}
+    // constructor(
+    //     private userService: UserService;
+    // ){}
 
-//     @Get()
-//     @UseGuards(RolesGuard)
-//     @Roles('user')
-//     async getUser(@Body() data): Promise<IResponse> {
+    @Get()
+    // @UseGuards(RolesGuard)
+    @Roles('user')
+    async getUser(@Body() data) {
 
-//         return this.userService.findByEmail(data.email);
+        // return this.userService.findByEmail(data.email);
 
-
-//         return data;
-//     }
+    }
 
 
-// }
+}
