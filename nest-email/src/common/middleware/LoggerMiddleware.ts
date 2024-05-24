@@ -15,9 +15,11 @@ export class LoggerMiddleware implements NestMiddleware{
 
             // console.log(JSON.stringify(data.teste));
 
+
             if (Object.keys(data).length !== 0){
                 
-                console.log('Request: ' + JSON.stringify(data) + 'Timestamp: ' + Date() + ' URL : ' + '')
+                console.log('Request: ' + JSON.stringify(data) + 'Timestamp: ' + Date() + ' URL : ' + req.baseUrl)
+
             }
         }catch(e){
             return;

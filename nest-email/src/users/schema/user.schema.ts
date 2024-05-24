@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 export const UserSchema = new mongoose.Schema({
 
     id: String,
-    date: Date.now,
+    date: {type: Date, default: Date.now},
     name: String,
     surname: String,
     email: String,

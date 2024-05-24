@@ -1,36 +1,44 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { Roles } from "common/decorators/roles.decorator";
+import { Observable } from "rxjs";
+
 
 @Injectable()
 export class RolesGuard implements CanActivate {
 
-    constructor(private reflector: Reflector){}
+  constructor(private readonly reflector: Reflector){}
 
-  canActivate(context: ExecutionContext): boolean {
 
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
 
-    if(!roles){
+      const roles = this.reflector.get(Roles, context.getHandler)
+
+      if (!roles){
         return true;
-    }
-
-    const request = context.switchToHttp().getRequest()
-    const UserReq = {
-      email: 'test@gmail.com'
-    }
-
-
-    let hasPermission = false;
-
-
-    if(request.body.email || request.params.id){
-      if(request.body.email == UserReq.email || request.params.id == UserReq.email ){
-        hasPermission = true;
       }
-    }
 
-    return hasPermission;
+      const req = context.switchToHttp().getRequest();
+      const user = req.user;
+      const hasRole = user.roles.some((role) => {roles.indexOf(role) < 0});
 
-    
+      let hasPermission = false; 
+
+      if(hasRole){
+        hasPermission = true;
+
+        if(req.param.email || req.body.email){  
+
+          if(req.user.email != req.param.email && req.user.email != req.body.email){
+            hasPermission = false; 
+          }
+
+        }
+
+      }
+
+      return user && user.roles && hasPermission;
   }
+
+
 }
